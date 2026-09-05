@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <!-- Conversion Rule for Automated PII Masking -->
+    <conversionRule conversionWord="maskPii"
+                    converterClass="com.riskshield.common.logging.PiiMaskingPatternConverter" />
+
+    <!-- Console Appender with PII Redaction -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %clr(%5p) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} : %maskPii(%m)%n%wEx</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root Logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <!-- Audit & Security Logger specific configuration -->
+    <logger name="com.riskshield.audit" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="com.riskshield.security" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+</configuration>

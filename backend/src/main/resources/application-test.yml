@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: riskshield-backend-test
+  datasource:
+    url: jdbc:h2:mem:riskshield_test_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  flyway:
+    enabled: false
+
+riskshield:
+  ml-service:
+    url: http://localhost:8000
+    timeout-ms: 3000
+  gemini:
+    api-key: ""
+    model: gemini-1.5-flash
+    base-url: https://generativelanguage.googleapis.com
+    timeout-ms: 1000
+  policy:
+    default-block-threshold: 85.0
+    default-review-threshold: 60.0

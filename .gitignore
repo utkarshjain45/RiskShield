@@ -64,3 +64,12 @@ postgres-data/
 redis-data/
 kafka-data/
 zookeeper-data/
+
+# Local-only reference docs
+docs/DEMO_SCRIPT.md
+docs/JUDGING.md
+
+# Local-only helper scripts
+start.bat
+start.sh
+start.ps1

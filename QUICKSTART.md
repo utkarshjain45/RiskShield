@@ -62,30 +62,14 @@ copy .env.example .env
 
 ### Step 3: Start the Platform (1 Single Command)
 
-Start all services (PostgreSQL database, Redis cache, Kafka messaging, Python ML service, Spring Boot core engine, and React frontend console) using the startup script for your operating system:
+Start all services (PostgreSQL database, Redis cache, Kafka messaging, Python ML service, Spring Boot core engine, and React frontend console) using Docker Compose:
 
-**On Linux / macOS:**
-```bash
-chmod +x start.sh
-./start.sh
-```
-
-**On Windows (PowerShell):**
-```powershell
-.\start.ps1
-```
-
-**On Windows (CMD):**
-```cmd
-start.bat
-```
-
-**Or using Docker Compose directly (all platforms):**
 ```bash
 docker compose up --build -d
 ```
 
 Docker will download the images, build the containers, and launch all services in the background. This typically takes 2–3 minutes on the first run.
+
 
 ---
 
@@ -175,5 +159,4 @@ For advanced details, architecture specifications, API references, and security 
 - 🧠 **[Model Card](docs/MODEL_CARD.md)** — XGBoost held-out evaluation, confusion matrix, and TreeSHAP explainability.
 - 🛡️ **[Security Architecture](docs/SECURITY.md)** — RBAC, webhook HMAC verification, and replay attack defense.
 - 🎯 **[Threat Model](docs/THREAT_MODEL.md)** — STRIDE security matrix for 9 payment fraud vectors.
-- 📋 **[Demo Script](docs/DEMO_SCRIPT.md)** — Timed 5-minute evaluation walkthrough for judges.
-- 🏆 **[Judging Criteria Map](docs/JUDGING.md)** — Evaluation criteria mapping for hackathon tracks.
+- 💳 **[Razorpay Test Mode Setup](docs/RAZORPAY_TEST_MODE_SETUP.md)** — Connecting live Razorpay webhooks.

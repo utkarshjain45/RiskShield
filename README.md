@@ -101,8 +101,6 @@ RiskShield AI/
     ├── MODEL_CARD.md       # ML model evaluation, precision/recall, and metrics
     ├── SECURITY.md         # RBAC, multi-tenant isolation, and webhook security
     ├── THREAT_MODEL.md     # STRIDE threat matrix covering 9 fraud vectors
-    ├── DEMO_SCRIPT.md      # 5-minute evaluation walkthrough guide
-    ├── JUDGING.md          # Hackathon track criteria mapping
     └── RAZORPAY_TEST_MODE_SETUP.md # Razorpay webhook configuration guide
 ```
 
@@ -117,7 +115,6 @@ All in-depth technical specifications and deep-dive guides are organized in the 
 - 🧠 **[ML Model Card](docs/MODEL_CARD.md)** — XGBoost performance metrics (99.1% Precision, 100% Recall on test set) and confusion matrix.
 - 🛡️ **[Security Architecture](docs/SECURITY.md)** — HMAC signature validation, PII redaction, rate limiting, and RBAC roles.
 - 🎯 **[Threat Model](docs/THREAT_MODEL.md)** — STRIDE matrix detailing 9 payment attack vectors and mitigations.
-- 📋 **[Demo Script](docs/DEMO_SCRIPT.md)** — Timed walkthrough script for demonstrations and evaluations.
 - 💳 **[Razorpay Test Mode Setup](docs/RAZORPAY_TEST_MODE_SETUP.md)** — Guide for connecting live Razorpay test webhooks.
 
 ---

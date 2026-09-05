@@ -1,0 +1,83 @@
+{
+  "dataset_metrics": {
+    "total_transactions": 100000,
+    "target_fraud_rate": 0.02,
+    "actual_fraud_rate": 0.02,
+    "total_fraud_count": 2000,
+    "total_legit_count": 98000,
+    "unique_merchants": 250,
+    "unique_customers": 14984,
+    "unique_devices": 13863,
+    "unique_ips": 16210,
+    "date_start": "2026-06-01T00:06:14",
+    "date_end": "2026-08-30T23:59:25"
+  },
+  "amount_inr_distributions": {
+    "legitimate": {
+      "mean": 2093.44,
+      "median": 1146.57,
+      "std": 2286.86,
+      "min": 89.79,
+      "max": 30434.45
+    },
+    "fraudulent": {
+      "mean": 5640.92,
+      "median": 5350.95,
+      "std": 3969.36,
+      "min": 20.22,
+      "max": 50502.98
+    }
+  },
+  "chronological_splits": {
+    "train": {
+      "count": 70000,
+      "ratio": 0.7,
+      "fraud_count": 1415,
+      "fraud_rate": 0.02021,
+      "start": "2026-06-01T00:06:14",
+      "end": "2026-08-03T16:28:43"
+    },
+    "validation": {
+      "count": 15000,
+      "ratio": 0.15,
+      "fraud_count": 141,
+      "fraud_rate": 0.0094,
+      "start": "2026-08-03T16:29:20",
+      "end": "2026-08-17T14:39:18"
+    },
+    "test": {
+      "count": 15000,
+      "ratio": 0.15,
+      "fraud_count": 444,
+      "fraud_rate": 0.0296,
+      "start": "2026-08-17T14:40:22",
+      "end": "2026-08-30T23:59:25"
+    }
+  },
+  "breakdowns": {
+    "fraud_scenarios": {
+      "legitimate": 98000,
+      "coordinated_cluster_spike": 757,
+      "device_reuse_syndicate": 545,
+      "ip_pooling_abuse": 410,
+      "velocity_fraud": 213,
+      "new_device_abuse": 34,
+      "unusual_time_abuse": 16,
+      "amount_anomaly": 16,
+      "abnormal_behavior": 9
+    },
+    "payment_methods": {
+      "upi": 51473,
+      "card": 37776,
+      "netbanking": 10751
+    },
+    "transaction_status": {
+      "SUCCESS": 96954,
+      "FAILED": 3046
+    }
+  },
+  "performance": {
+    "elapsed_seconds": 4.15,
+    "throughput_tx_per_sec": 24107.9
+  }
+}

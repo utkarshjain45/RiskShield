@@ -1,0 +1,48 @@
+# ==============================================================================
+# RiskShield AI — Synthetic Transaction Generator Configuration
+# ==============================================================================
+
+# Simulation scale and targets
+transactions: 100000
+fraud_rate: 0.02
+random_seed: 42
+
+# Relational entity counts
+merchants: 250
+customers: 15000
+devices: 22000
+ips: 28000
+
+# Temporal window (90-day simulation)
+start_date: "2026-06-01T00:00:00"
+end_date: "2026-08-31T23:59:59"
+
+# Chronological split ratios (must sum to 1.0)
+train_ratio: 0.70
+val_ratio: 0.15
+test_ratio: 0.15
+
+# Fraud Pattern Weights (Relative distribution of fraud scenarios A through H)
+# A. velocity_fraud: Rapid burst of transactions in minutes from same customer/card
+# B. new_device_abuse: ATO on aged account from new device + unusual amount
+# C. device_reuse_syndicate: Single device farm transacting across 20+ accounts
+# D. ip_pooling_abuse: Single VPN/datacenter IP originating transactions across dozens of accounts
+# E. amount_anomaly: Contextual deviation from customer history & merchant baseline
+# F. unusual_time_abuse: Off-peak 3-5 AM transactions with high risk signals
+# G. abnormal_behavior: Drastic category and payment channel shift
+# H. coordinated_cluster_spike: Synchronized attack burst on single merchant over 2 hours
+fraud_pattern_weights:
+  velocity_fraud: 0.18
+  new_device_abuse: 0.16
+  device_reuse_syndicate: 0.14
+  ip_pooling_abuse: 0.14
+  amount_anomaly: 0.12
+  unusual_time_abuse: 0.10
+  abnormal_behavior: 0.08
+  coordinated_cluster_spike: 0.08
+
+# Output paths relative to project / execution directory
+output_dirs:
+  raw: "data/raw"
+  processed: "data/processed"
+  stats: "data/summary_statistics.json"

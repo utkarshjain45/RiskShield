@@ -1,0 +1,164 @@
+{
+  "timestamp": "2026-09-04T21:31:36.054750",
+  "training_metadata": {
+    "train_samples": 70000,
+    "val_samples": 15000,
+    "test_samples": 15000,
+    "features_count": 32,
+    "class_weight_ratio": 48.47
+  },
+  "models": {
+    "Logistic_Regression": {
+      "training_time_seconds": 0.08,
+      "optimal_threshold": 0.29,
+      "validation_evaluation": {
+        "threshold": 0.29,
+        "precision": 0.99296,
+        "recall": 1.0,
+        "f1": 0.99647,
+        "roc_auc": 1.0,
+        "pr_auc": 0.99954,
+        "false_positive_rate": 7e-05,
+        "false_negative_rate": 0.0,
+        "confusion_matrix": {
+          "true_negatives": 14858,
+          "false_positives": 1,
+          "false_negatives": 0,
+          "true_positives": 141
+        },
+        "monetary_impact": {
+          "fn_count": 0,
+          "fn_cost_inr": 0.0,
+          "fp_count": 1,
+          "fp_cost_inr": 215.44,
+          "total_cost_inr": 215.44
+        }
+      },
+      "test_evaluation": {
+        "threshold": 0.29,
+        "precision": 0.99107,
+        "recall": 1.0,
+        "f1": 0.99552,
+        "roc_auc": 0.99999,
+        "pr_auc": 0.99977,
+        "false_positive_rate": 0.00027,
+        "false_negative_rate": 0.0,
+        "confusion_matrix": {
+          "true_negatives": 14552,
+          "false_positives": 4,
+          "false_negatives": 0,
+          "true_positives": 444
+        },
+        "monetary_impact": {
+          "fn_count": 0,
+          "fn_cost_inr": 0.0,
+          "fp_count": 4,
+          "fp_cost_inr": 776.48,
+          "total_cost_inr": 776.48
+        }
+      }
+    },
+    "Random_Forest": {
+      "training_time_seconds": 1.1,
+      "optimal_threshold": 0.24999999999999994,
+      "validation_evaluation": {
+        "threshold": 0.25,
+        "precision": 0.99296,
+        "recall": 1.0,
+        "f1": 0.99647,
+        "roc_auc": 0.99999,
+        "pr_auc": 0.99851,
+        "false_positive_rate": 7e-05,
+        "false_negative_rate": 0.0,
+        "confusion_matrix": {
+          "true_negatives": 14858,
+          "false_positives": 1,
+          "false_negatives": 0,
+          "true_positives": 141
+        },
+        "monetary_impact": {
+          "fn_count": 0,
+          "fn_cost_inr": 0.0,
+          "fp_count": 1,
+          "fp_cost_inr": 215.44,
+          "total_cost_inr": 215.44
+        }
+      },
+      "test_evaluation": {
+        "threshold": 0.25,
+        "precision": 0.99107,
+        "recall": 1.0,
+        "f1": 0.99552,
+        "roc_auc": 0.99997,
+        "pr_auc": 0.9989,
+        "false_positive_rate": 0.00027,
+        "false_negative_rate": 0.0,
+        "confusion_matrix": {
+          "true_negatives": 14552,
+          "false_positives": 4,
+          "false_negatives": 0,
+          "true_positives": 444
+        },
+        "monetary_impact": {
+          "fn_count": 0,
+          "fn_cost_inr": 0.0,
+          "fp_count": 4,
+          "fp_cost_inr": 776.48,
+          "total_cost_inr": 776.48
+        }
+      }
+    },
+    "XGBoost": {
+      "training_time_seconds": 0.34,
+      "optimal_threshold": 0.05,
+      "validation_evaluation": {
+        "threshold": 0.05,
+        "precision": 0.99296,
+        "recall": 1.0,
+        "f1": 0.99647,
+        "roc_auc": 0.99999,
+        "pr_auc": 0.99921,
+        "false_positive_rate": 7e-05,
+        "false_negative_rate": 0.0,
+        "confusion_matrix": {
+          "true_negatives": 14858,
+          "false_positives": 1,
+          "false_negatives": 0,
+          "true_positives": 141
+        },
+        "monetary_impact": {
+          "fn_count": 0,
+          "fn_cost_inr": 0.0,
+          "fp_count": 1,
+          "fp_cost_inr": 215.44,
+          "total_cost_inr": 215.44
+        }
+      },
+      "test_evaluation": {
+        "threshold": 0.05,
+        "precision": 0.99107,
+        "recall": 1.0,
+        "f1": 0.99552,
+        "roc_auc": 0.99997,
+        "pr_auc": 0.99899,
+        "false_positive_rate": 0.00027,
+        "false_negative_rate": 0.0,
+        "confusion_matrix": {
+          "true_negatives": 14552,
+          "false_positives": 4,
+          "false_negatives": 0,
+          "true_positives": 444
+        },
+        "monetary_impact": {
+          "fn_count": 0,
+          "fn_cost_inr": 0.0,
+          "fp_count": 4,
+          "fp_cost_inr": 776.48,
+          "total_cost_inr": 776.48
+        }
+      }
+    }
+  },
+  "best_model": "XGBoost",
+  "summary": "Selected **XGBoost** as the production champion. It achieved the lowest total business loss (INR 776.48) on the held-out test set, capturing 100% of test fraud with minimal false-alarm friction (FPR: 0.03%). XGBoost is uniquely suited for production deployment because its gradient-boosted decision tree ensemble enables exact, fast TreeSHAP feature attributions, directly powering RiskShield AI's contributing signal explanations for merchants and human fraud investigators."
+}

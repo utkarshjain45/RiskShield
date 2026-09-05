@@ -1,0 +1,30 @@
+{
+  "model_name": "XGBoost",
+  "model_version": "v1.0.0-xgboost",
+  "created_at": "2026-09-04T21:31:40.741140",
+  "random_seed": 42,
+  "optimal_threshold": 0.05,
+  "metrics_summary": {
+    "threshold": 0.05,
+    "precision": 0.99107,
+    "recall": 1.0,
+    "f1": 0.99552,
+    "roc_auc": 0.99997,
+    "pr_auc": 0.99899,
+    "false_positive_rate": 0.00027,
+    "false_negative_rate": 0.0,
+    "confusion_matrix": {
+      "true_negatives": 14552,
+      "false_positives": 4,
+      "false_negatives": 0,
+      "true_positives": 444
+    },
+    "monetary_impact": {
+      "fn_count": 0,
+      "fn_cost_inr": 0.0,
+      "fp_count": 4,
+      "fp_cost_inr": 776.48,
+      "total_cost_inr": 776.48
+    }
+  }
+}

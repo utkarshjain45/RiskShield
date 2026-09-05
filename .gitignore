@@ -1,0 +1,66 @@
+# Environment and Local Secrets
+.env
+.env.local
+*.env
+*.pem
+*.key
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# IDE & Editor Configurations
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Java / Spring Boot (backend)
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/*.log
+backend/logs/
+
+# Python / FastAPI (ml-service & data-generator)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / React (frontend)
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.npm/
+*.tsbuildinfo
+
+# Docker / Volumes / Infrastructure
+postgres-data/
+redis-data/
+kafka-data/
+zookeeper-data/

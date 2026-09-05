@@ -1,0 +1,206 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------------------------------------------
+  # PostgreSQL 16: Primary relational database for transactions, audit logs,
+  # merchant risk policies, and alert records.
+  # ----------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: riskshield-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-riskshield_db}
+      POSTGRES_USER: ${POSTGRES_USER:-riskshield_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-riskshield_secure_dev_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-riskshield_user} -d ${POSTGRES_DB:-riskshield_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - riskshield-network
+
+  # ----------------------------------------------------------------------------
+  # Redis 7: In-memory cache for sliding-window velocity aggregations,
+  # rate-limiting token buckets, and real-time blacklists.
+  # ----------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: riskshield-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - riskshield-network
+
+  # ----------------------------------------------------------------------------
+  # Zookeeper & Apache Kafka: Asynchronous event messaging bus for transaction
+  # events, audit pipelines, and spike detection streams.
+  # ----------------------------------------------------------------------------
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: riskshield-zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - riskshield-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: riskshield-kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 9092 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - riskshield-network
+
+  # ----------------------------------------------------------------------------
+  # ML Service: Python FastAPI microservice providing XGBoost inference,
+  # TreeSHAP feature attributions, statistical spike detection, and AI assistant.
+  # ----------------------------------------------------------------------------
+  ml-service:
+    build:
+      context: ./ml-service
+      dockerfile: Dockerfile
+    container_name: riskshield-ml-service
+    restart: unless-stopped
+    ports:
+      - "${ML_SERVICE_PORT:-8000}:8000"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - riskshield-network
+
+  # ----------------------------------------------------------------------------
+  # Backend: Spring Boot 3.3 REST API gateway, Razorpay webhook ingest,
+  # deterministic policy engine, and immutable audit recorder.
+  # ----------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: riskshield-backend
+    restart: unless-stopped
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB:-riskshield_db}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-riskshield_user}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-riskshield_secure_dev_password}
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - ML_SERVICE_URL=http://ml-service:8000
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID:-rzp_test_placeholder}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET:-rzp_test_secret_placeholder}
+      - RAZORPAY_WEBHOOK_SECRET=${RAZORPAY_WEBHOOK_SECRET:-rzp_test_webhook_secret}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-1.5-flash}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      ml-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - riskshield-network
+
+  # ----------------------------------------------------------------------------
+  # Frontend: React 18 / Vite merchant operations console, risk dashboard,
+  # and AI investigation drawer.
+  # ----------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: riskshield-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080/api/v1
+    depends_on:
+      - backend
+    networks:
+      - riskshield-network
+
+  # ----------------------------------------------------------------------------
+  # Data Generator: Realistic transaction & synthetic fraud simulation tool.
+  # Can be activated via profile: `docker compose --profile simulator up`
+  # ----------------------------------------------------------------------------
+  data-generator:
+    build:
+      context: ./data-generator
+      dockerfile: Dockerfile
+    container_name: riskshield-data-generator
+    profiles:
+      - simulator
+    environment:
+      - BACKEND_API_URL=http://backend:8080/api/v1
+      - TRANSACTIONS_PER_SECOND=${SIMULATOR_TRANSACTIONS_PER_SECOND:-2}
+      - FRAUD_RATIO=${SIMULATOR_FRAUD_RATIO:-0.08}
+    depends_on:
+      - backend
+    networks:
+      - riskshield-network
+
+networks:
+  riskshield-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

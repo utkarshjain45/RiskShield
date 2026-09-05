@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==============================================================================
+   RiskShield AI — Global Base & Typography Tokens
+   Primary UI font: Inter with tabular figures for financial data
+   ============================================================================== */
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, monospace;
+  
+  /* Chart Color Tokens */
+  --chart-primary: #4f46e5;
+  --chart-primary-soft: rgba(79, 70, 229, 0.08);
+  --chart-success: #059669;
+  --chart-warning: #d97706;
+  --chart-danger: #e11d48;
+  --chart-info: #2563eb;
+  --chart-grid: #f1f5f9;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/* Ensure tabular numbers for operational metrics and currency */
+.tabular-nums, .font-mono {
+  font-feature-settings: 'tnum';
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Keyframe animations for subtle spinners */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin 1s linear infinite;
+}

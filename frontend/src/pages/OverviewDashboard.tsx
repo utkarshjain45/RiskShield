@@ -105,6 +105,28 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
 
   const RISK_BUCKET_COLORS = ['#059669', '#10b981', '#d97706', '#f97316', '#e11d48'];
 
+  const renderRiskBucketTick = (props: any) => {
+    const { x, y, payload } = props;
+    if (!payload || !payload.value) return null;
+    const raw = String(payload.value);
+    const parts = raw.split(' ');
+    const range = parts[0];
+    const label = parts.slice(1).join(' ').replace(/[()]/g, '');
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text x={0} y={0} dy={10} textAnchor="middle" fill="#475569" fontSize={10} fontWeight={600}>
+          {range}
+        </text>
+        {label && (
+          <text x={0} y={0} dy={22} textAnchor="middle" fill="#94a3b8" fontSize={9}>
+            ({label})
+          </text>
+        )}
+      </g>
+    );
+  };
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -375,9 +397,16 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           </div>
           <div className="w-full h-56">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={charts.risk_distribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <BarChart data={charts.risk_distribution} margin={{ top: 10, right: 10, left: -20, bottom: 6 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                <XAxis dataKey="range" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={{ stroke: '#e2e8f0' }} />
+                <XAxis
+                  dataKey="range"
+                  interval={0}
+                  tick={renderRiskBucketTick}
+                  height={34}
+                  tickLine={false}
+                  axisLine={{ stroke: '#e2e8f0' }}
+                />
                 <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={{ stroke: '#e2e8f0' }} />
                 <Tooltip
                   contentStyle={{

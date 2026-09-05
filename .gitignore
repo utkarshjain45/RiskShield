@@ -68,6 +68,7 @@ zookeeper-data/
 # Local-only reference docs
 docs/DEMO_SCRIPT.md
 docs/JUDGING.md
+docs/screenshots/
 
 # Local-only helper scripts
 start.bat
